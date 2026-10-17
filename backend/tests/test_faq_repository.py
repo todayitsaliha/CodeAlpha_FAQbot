@@ -32,7 +32,7 @@ class TestShippedDataset:
     def test_every_faq_has_category_and_alternate_phrasings(self):
         faqs = FaqRepository(config.FAQ_PATH).load()
         assert all(faq.category for faq in faqs)
-        assert all(len(faq.alt_questions) >= 2 for faq in faqs)
+        assert all(len(faq.alt_questions) >= 4 for faq in faqs)
 
     def test_phrasings_include_canonical_question_first(self):
         faq = FaqRepository(config.FAQ_PATH).load()[0]

@@ -11,6 +11,11 @@ with what is actually delivered. Scope and quality gates are unchanged.
 | 2.1 / 2.2 Phases | Phase 1-4 = Week 1-4 | Sprint 1 = Days 1-2, Sprint 2 = Days 3-5, Sprint 3 = Days 6-7, Sprint 4 = Days 8-10 |
 | 2.2 Phase 4 | Stretch goals if time permits | Removed from the sprint; tuning, UAT, handover only |
 | 4.10 Stretch Features | "time permitting in Week 4" | Deferred (post-release) |
+| Document Control: FAQ Topic | To be confirmed in Phase 1 | Confirmed: fictional online store "ShopEase", synthetic dataset |
+| 1.3 Scope: FAQ collection | Collection from client documents, tickets or website | Synthetic generation of FAQs; schema unchanged so real data can be swapped in |
+| 2.2 Phase 1 deliverable | Cleaned faqs.json approved by client | Cleaned synthetic faqs.json approved internally by the engineering lead |
+| 10 Risks: too few or low-quality FAQs | Client reviews every answer | Mitigated by synthetic generation (80 FAQs) and a held-out evaluation set |
+| 11 Assumptions: client provides source material | Required | Not required for this delivery |
 | 9.1 Repository naming | `<developer-first-name>-faq-chatbot` | `CodeAlpha_FAQbot` (client-specified) |
 | 10 Risks: scope creep | Optional features limited to Weeks 3-4 | Optional features limited to Sprints 3-4 |
 | 11 Assumptions | Contact available "during Week 1"; hosting provisioned "before Week 3" | Contact available during Sprint 1 (Days 1-3 for dataset review); hosting provisioned before Day 6 |

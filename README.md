@@ -59,6 +59,7 @@ review. See `.github/pull_request_template.md`.
 
 ## Dataset note
 
-`backend/data/faqs.json` currently holds a **placeholder dataset** for a fictional
-online store ("ShopEase") so engineering is not blocked. It will be replaced by the
-client-approved FAQ set once the topic and source material are confirmed.
+The project uses a **synthetic dataset** for a fictional online store ("ShopEase"):
+80 FAQs, 320 alternate phrasings and a separate 144-case evaluation set. See
+`backend/data/README.md` for provenance and the rules for extending it. The schema is
+identical to a real dataset, so swapping in genuine client FAQs later needs no code changes.
