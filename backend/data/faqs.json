@@ -1,0 +1,380 @@
+[
+  {
+    "id": 1,
+    "question": "How long does delivery take?",
+    "answer": "Standard delivery takes 3-5 business days and express delivery takes 1-2 business days. Orders placed after 2 PM are processed on the next business day.",
+    "category": "Shipping",
+    "alt_questions": ["How many days until my order arrives?", "What is the estimated delivery time?"]
+  },
+  {
+    "id": 2,
+    "question": "Do you offer express shipping?",
+    "answer": "Yes. Express shipping (1-2 business days) is available at checkout for $9.99.",
+    "category": "Shipping",
+    "alt_questions": ["Can I get my order faster?", "Is there overnight or next-day delivery?"]
+  },
+  {
+    "id": 3,
+    "question": "How much does shipping cost?",
+    "answer": "Standard shipping costs $4.99 and is free on orders over $50. Express shipping costs $9.99.",
+    "category": "Shipping",
+    "alt_questions": ["What are the delivery charges?", "Is shipping free?"]
+  },
+  {
+    "id": 4,
+    "question": "Do you ship internationally?",
+    "answer": "Yes, we ship to more than 40 countries. International delivery takes 7-14 business days, and any customs duties or taxes are paid by the recipient.",
+    "category": "Shipping",
+    "alt_questions": ["Can I order from outside the country?", "Do you deliver overseas?"]
+  },
+  {
+    "id": 5,
+    "question": "Can I track my order?",
+    "answer": "Yes. Once your order ships you will receive an email with a tracking number and a link to the carrier's tracking page.",
+    "category": "Shipping",
+    "alt_questions": ["How do I track my package?", "Where is my order right now?"]
+  },
+  {
+    "id": 6,
+    "question": "Which carriers do you use?",
+    "answer": "We ship with UPS, FedEx and USPS, depending on your location and the delivery speed you select.",
+    "category": "Shipping",
+    "alt_questions": ["What courier delivers my parcel?", "Who delivers the orders?"]
+  },
+  {
+    "id": 7,
+    "question": "Can I change my shipping address after ordering?",
+    "answer": "You can change the address within 1 hour of placing the order from the Orders page, or by contacting support. Once an order has shipped the address cannot be changed.",
+    "category": "Shipping",
+    "alt_questions": ["I entered the wrong delivery address, what can I do?", "How do I update the address on an existing order?"]
+  },
+  {
+    "id": 8,
+    "question": "What happens if I am not home when my order is delivered?",
+    "answer": "The carrier will leave a notice and try again on the next business day. After 3 failed attempts the package is returned to us and you will be refunded.",
+    "category": "Shipping",
+    "alt_questions": ["What if nobody is available to receive the package?", "Will the courier retry delivery?"]
+  },
+  {
+    "id": 9,
+    "question": "My package is delayed. What should I do?",
+    "answer": "If your order has not arrived 3 business days after the estimated delivery date, contact support with your order number and we will open an investigation with the carrier.",
+    "category": "Shipping",
+    "alt_questions": ["My order has not arrived yet", "Package is late, who do I contact?"]
+  },
+  {
+    "id": 10,
+    "question": "Do you deliver to PO boxes?",
+    "answer": "Standard shipping via USPS can be delivered to PO boxes. Express shipping requires a street address.",
+    "category": "Shipping",
+    "alt_questions": ["Can I ship to a post office box?", "Is delivery to a P.O. box possible?"]
+  },
+  {
+    "id": 11,
+    "question": "What is your return policy?",
+    "answer": "Items can be returned within 30 days of delivery as long as they are unused and in their original packaging.",
+    "category": "Returns",
+    "alt_questions": ["How many days do I have to return an item?", "Can I send something back?"]
+  },
+  {
+    "id": 12,
+    "question": "How do I start a return?",
+    "answer": "Go to Orders, select the item and choose 'Return item'. Print the prepaid label and drop the parcel at any carrier location.",
+    "category": "Returns",
+    "alt_questions": ["What is the process for returning a product?", "How can I return my purchase?"]
+  },
+  {
+    "id": 13,
+    "question": "How long do refunds take?",
+    "answer": "Refunds are issued to your original payment method within 5-7 business days after we receive and inspect the returned item.",
+    "category": "Returns",
+    "alt_questions": ["When will I get my money back?", "How soon is a refund processed?"]
+  },
+  {
+    "id": 14,
+    "question": "Who pays for return shipping?",
+    "answer": "Returns are free for defective or incorrect items. For all other returns a $4.99 label fee is deducted from your refund.",
+    "category": "Returns",
+    "alt_questions": ["Do I have to pay to send an item back?", "Is the return label free?"]
+  },
+  {
+    "id": 15,
+    "question": "Can I exchange an item?",
+    "answer": "Yes. You can exchange for a different size or colour within 30 days, subject to availability. Choose 'Exchange' when you start your return.",
+    "category": "Returns",
+    "alt_questions": ["I want a different size, can I swap it?", "How do exchanges work?"]
+  },
+  {
+    "id": 16,
+    "question": "What if I received a damaged or defective item?",
+    "answer": "Contact us within 7 days of delivery with a photo of the problem. We will send a replacement or issue a full refund at no cost to you.",
+    "category": "Returns",
+    "alt_questions": ["My product arrived broken", "The item I got is faulty, what now?"]
+  },
+  {
+    "id": 17,
+    "question": "What if I received the wrong item?",
+    "answer": "We apologise for the mistake. Contact support with your order number and a photo and we will ship the correct item free of charge and arrange a free pickup of the wrong one.",
+    "category": "Returns",
+    "alt_questions": ["I got someone else's product", "The item delivered is not what I ordered"]
+  },
+  {
+    "id": 18,
+    "question": "Are sale items returnable?",
+    "answer": "Sale items can be returned within 30 days. Items marked 'Final Sale' cannot be returned or exchanged.",
+    "category": "Returns",
+    "alt_questions": ["Can I return discounted products?", "Is clearance merchandise refundable?"]
+  },
+  {
+    "id": 19,
+    "question": "Can I return an item without a receipt?",
+    "answer": "You will need your order number or confirmation email. Without proof of purchase we can only offer store credit at the current selling price.",
+    "category": "Returns",
+    "alt_questions": ["I lost my receipt, can I still return it?", "Do I need an invoice to get a refund?"]
+  },
+  {
+    "id": 20,
+    "question": "What payment methods do you accept?",
+    "answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay and Google Pay.",
+    "category": "Payments",
+    "alt_questions": ["Which credit cards can I use?", "Can I pay with PayPal?"]
+  },
+  {
+    "id": 21,
+    "question": "Is it safe to enter my card details?",
+    "answer": "Yes. All payments are encrypted with TLS and processed by a PCI-DSS compliant provider. We never store your full card number.",
+    "category": "Payments",
+    "alt_questions": ["Is my payment information secure?", "Do you keep my credit card number?"]
+  },
+  {
+    "id": 22,
+    "question": "Why was my payment declined?",
+    "answer": "Common reasons are incorrect card details, insufficient funds or a security hold by your bank. Check your details and try again, or contact your bank.",
+    "category": "Payments",
+    "alt_questions": ["My card was rejected at checkout", "Transaction failed, what should I do?"]
+  },
+  {
+    "id": 23,
+    "question": "When is my card charged?",
+    "answer": "Your card is authorised when you place the order and charged when the order ships.",
+    "category": "Payments",
+    "alt_questions": ["At what point do you take payment?", "Do you charge me immediately?"]
+  },
+  {
+    "id": 24,
+    "question": "Can I pay in instalments?",
+    "answer": "Yes. With Klarna you can split purchases over $50 into 4 interest-free payments at checkout.",
+    "category": "Payments",
+    "alt_questions": ["Do you offer buy now pay later?", "Can I split the payment into parts?"]
+  },
+  {
+    "id": 25,
+    "question": "Do you accept gift cards?",
+    "answer": "Yes. Enter the gift card code at checkout. Gift cards can be combined with other payment methods.",
+    "category": "Payments",
+    "alt_questions": ["How do I redeem a gift card?", "Where do I enter my gift card code?"]
+  },
+  {
+    "id": 26,
+    "question": "How do I use a discount code?",
+    "answer": "Enter the code in the 'Promo code' box at checkout and click Apply. Only one code can be used per order, and codes cannot be added after the order is placed.",
+    "category": "Payments",
+    "alt_questions": ["Where do I put a coupon code?", "My promo code is not working"]
+  },
+  {
+    "id": 27,
+    "question": "Will I get an invoice or receipt?",
+    "answer": "A receipt is emailed immediately after purchase. Invoices with tax details can be downloaded from the order page.",
+    "category": "Payments",
+    "alt_questions": ["How can I get a VAT invoice?", "Where can I download my receipt?"]
+  },
+  {
+    "id": 28,
+    "question": "How do I place an order?",
+    "answer": "Add items to your cart, click Checkout, enter your shipping and payment details and confirm. You will receive an order confirmation email.",
+    "category": "Orders",
+    "alt_questions": ["How do I buy something on the website?", "What are the steps to checkout?"]
+  },
+  {
+    "id": 29,
+    "question": "Can I cancel my order?",
+    "answer": "Orders can be cancelled within 1 hour of placing them from the Orders page. After that the order enters processing and you will need to return it once delivered.",
+    "category": "Orders",
+    "alt_questions": ["How do I cancel a purchase?", "I changed my mind, can I stop my order?"]
+  },
+  {
+    "id": 30,
+    "question": "Can I modify my order after placing it?",
+    "answer": "Items cannot be modified after the order is placed. Cancel within 1 hour and reorder, or place a separate new order.",
+    "category": "Orders",
+    "alt_questions": ["Can I add an item to an existing order?", "How do I change the quantity after ordering?"]
+  },
+  {
+    "id": 31,
+    "question": "I did not receive an order confirmation email.",
+    "answer": "Check your spam or junk folder first. If it is not there after 30 minutes, check your order history in your account or contact support.",
+    "category": "Orders",
+    "alt_questions": ["Where is my confirmation email?", "No email after purchase"]
+  },
+  {
+    "id": 32,
+    "question": "How can I check my order status?",
+    "answer": "Log in and open Orders to see whether your order is processing, shipped or delivered. Guest customers can use the link in their confirmation email.",
+    "category": "Orders",
+    "alt_questions": ["Where can I see my order history?", "What is the status of my order?"]
+  },
+  {
+    "id": 33,
+    "question": "Can I order without creating an account?",
+    "answer": "Yes, guest checkout is available. An account lets you track orders and save addresses for faster checkout.",
+    "category": "Orders",
+    "alt_questions": ["Is guest checkout available?", "Do I have to register to buy?"]
+  },
+  {
+    "id": 34,
+    "question": "Is there a minimum order amount?",
+    "answer": "There is no minimum order amount, but free standard shipping applies to orders over $50.",
+    "category": "Orders",
+    "alt_questions": ["What is the smallest order I can place?", "Can I order just one item?"]
+  },
+  {
+    "id": 35,
+    "question": "What if an item is out of stock?",
+    "answer": "Out-of-stock items show a 'Notify me' button. Enter your email and we will alert you when the item is back.",
+    "category": "Orders",
+    "alt_questions": ["When will sold out products be restocked?", "How do I get notified when an item is available again?"]
+  },
+  {
+    "id": 36,
+    "question": "How do I create an account?",
+    "answer": "Click 'Sign up' at the top right of the page, enter your email and a password, then verify your address using the confirmation email.",
+    "category": "Account",
+    "alt_questions": ["How can I register?", "Where do I sign up?"]
+  },
+  {
+    "id": 37,
+    "question": "I forgot my password. How do I reset it?",
+    "answer": "Click 'Forgot password' on the login page, enter your email and follow the reset link. The link is valid for 30 minutes.",
+    "category": "Account",
+    "alt_questions": ["Cannot log in, need password reset", "How do I recover my account password?"]
+  },
+  {
+    "id": 38,
+    "question": "How do I update my email or personal details?",
+    "answer": "Go to Account > Profile, edit your details and save. Changing your email address requires verification of the new address.",
+    "category": "Account",
+    "alt_questions": ["How can I change my phone number?", "Where do I edit my profile information?"]
+  },
+  {
+    "id": 39,
+    "question": "How do I delete my account?",
+    "answer": "Go to Account > Privacy > Delete account, or contact support. Order records that we are legally required to keep are retained.",
+    "category": "Account",
+    "alt_questions": ["I want to close my account", "Can you remove my personal data?"]
+  },
+  {
+    "id": 40,
+    "question": "How do I unsubscribe from marketing emails?",
+    "answer": "Click 'Unsubscribe' at the bottom of any marketing email or switch it off under Account > Notifications. You will still receive order-related emails.",
+    "category": "Account",
+    "alt_questions": ["Stop sending me promotional emails", "How can I opt out of the newsletter?"]
+  },
+  {
+    "id": 41,
+    "question": "How do I save items to a wishlist?",
+    "answer": "Click the heart icon on any product page. Wishlists are saved to your account, so you need to be logged in.",
+    "category": "Account",
+    "alt_questions": ["Can I save products for later?", "Where is my wishlist?"]
+  },
+  {
+    "id": 42,
+    "question": "How do I find my size?",
+    "answer": "Every product page has a size guide with measurements. If you are between sizes we recommend choosing the larger one.",
+    "category": "Products",
+    "alt_questions": ["Do you have a size chart?", "Which size should I choose?"]
+  },
+  {
+    "id": 43,
+    "question": "Are your products authentic?",
+    "answer": "Yes. We source all products directly from brands and authorised distributors.",
+    "category": "Products",
+    "alt_questions": ["Are the items original or fake?", "Do you sell genuine products?"]
+  },
+  {
+    "id": 44,
+    "question": "Do your products come with a warranty?",
+    "answer": "Electronics carry a 12-month manufacturer warranty. Warranty details are listed on each product page.",
+    "category": "Products",
+    "alt_questions": ["Is there a guarantee on the products?", "How long is the warranty period?"]
+  },
+  {
+    "id": 45,
+    "question": "Can I see product reviews?",
+    "answer": "Customer reviews appear on every product page. Only verified purchasers can leave a review.",
+    "category": "Products",
+    "alt_questions": ["Do you show customer ratings?", "Where can I read reviews from other buyers?"]
+  },
+  {
+    "id": 46,
+    "question": "Do you offer gift wrapping?",
+    "answer": "Yes. Add gift wrapping for $3.50 per item at checkout, with an optional personalised message.",
+    "category": "Products",
+    "alt_questions": ["Can you wrap my order as a gift?", "Is there a gift message option?"]
+  },
+  {
+    "id": 47,
+    "question": "Do you offer bulk or wholesale pricing?",
+    "answer": "Orders of 20 or more units qualify for bulk pricing. Email wholesale@shopease.example for a quote.",
+    "category": "Products",
+    "alt_questions": ["Can I get a discount for large quantities?", "Do you sell to businesses at wholesale?"]
+  },
+  {
+    "id": 48,
+    "question": "Where can I find product specifications?",
+    "answer": "Dimensions, materials and technical specifications are listed under the 'Details' tab on each product page.",
+    "category": "Products",
+    "alt_questions": ["What are the dimensions of the item?", "Where do I find the materials used?"]
+  },
+  {
+    "id": 49,
+    "question": "How can I contact customer support?",
+    "answer": "You can use live chat on our website, email support@shopease.example, or call 1-800-555-0199.",
+    "category": "Support",
+    "alt_questions": ["What is your support email?", "Is there a customer service phone number?"]
+  },
+  {
+    "id": 50,
+    "question": "What are your customer support hours?",
+    "answer": "Phone and live chat are available Monday to Friday 9 AM-6 PM ET and Saturday 10 AM-4 PM ET. Emails are answered within 24 hours.",
+    "category": "Support",
+    "alt_questions": ["When is customer service open?", "What time does your helpline close?"]
+  },
+  {
+    "id": 51,
+    "question": "Do you have a physical store?",
+    "answer": "No, ShopEase is online only. Our warehouse is not open to visitors.",
+    "category": "Support",
+    "alt_questions": ["Can I visit your shop in person?", "Where is your store located?"]
+  },
+  {
+    "id": 52,
+    "question": "How do I report a problem with the website?",
+    "answer": "Email support@shopease.example with a short description, the page you were on and a screenshot if possible, and our team will investigate.",
+    "category": "Support",
+    "alt_questions": ["I found a bug on your site", "The checkout page is not loading"]
+  },
+  {
+    "id": 53,
+    "question": "How do I leave feedback or make a complaint?",
+    "answer": "Use the Feedback form in the page footer or email support@shopease.example. Complaints are acknowledged within 48 hours.",
+    "category": "Support",
+    "alt_questions": ["I want to file a complaint", "Where can I give suggestions?"]
+  },
+  {
+    "id": 54,
+    "question": "Do you have a loyalty or rewards program?",
+    "answer": "Yes. ShopEase Rewards is free to join from your account page. You earn 1 point per $1 spent, and 100 points are worth $5 off.",
+    "category": "Support",
+    "alt_questions": ["Can I earn points on purchases?", "Is there a membership programme?"]
+  }
+]
