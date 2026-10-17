@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+instance/
+
+# NLTK data and tooling
+nltk_data/
+.mypy_cache/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
