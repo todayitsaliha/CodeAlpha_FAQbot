@@ -6,7 +6,7 @@ Source: STS v1.0, re-baselined to a 2-week / 4-sprint delivery.
 
 | ID | Requirement |
 |---|---|
-| FR-1 | FAQ knowledge base in `faqs.json` with at least 50 pairs; fields: id, question, answer, category, alt_questions |
+| FR-1 | FAQ knowledge base in `faqs.json` with at least 50 pairs (synthetic ShopEase dataset, currently 80); fields: id, question, answer, category, alt_questions |
 | FR-2 | One shared NLTK preprocessing pipeline (lowercase, clean, tokenize, stop-word removal keeping negations, lemmatize) used for FAQs and user input |
 | FR-3 | TF-IDF (unigrams + bigrams) with cosine-similarity matching |
 | FR-4 | Answer threshold and lower suggestion threshold; fallback with up to 3 suggested questions |
@@ -27,7 +27,7 @@ Source: STS v1.0, re-baselined to a 2-week / 4-sprint delivery.
 
 | Sprint | Exit criteria |
 |---|---|
-| 1 | Repo, branching and CI live; validated `faqs.json` (>= 50 pairs) loads from the CLI; draft evaluation set committed; requirements signed off |
+| 1 | Repo, branching and CI live; validated synthetic `faqs.json` (>= 50 pairs) loads from the CLI; evaluation set committed; requirements signed off |
 | 2 | CLI chatbot answers questions; preprocessing and matching unit tests pass; baseline accuracy report recorded |
 | 3 | User asks a question in the browser and gets the best match from the live backend; API tests pass |
 | 4 | Final accuracy report; client UAT sign-off; `v1.0.0` tagged on `main`; handover docs and deployment runbook |
