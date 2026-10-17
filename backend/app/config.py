@@ -10,3 +10,6 @@ EVALUATION_PATH = DATA_DIR / "test_questions.json"
 # Request limits (STS section 6.2)
 MIN_MESSAGE_LENGTH = 1
 MAX_MESSAGE_LENGTH = 500
+
+# Dataset quality gate (Sprint 1 exit criterion)
+MIN_FAQ_COUNT = 50
