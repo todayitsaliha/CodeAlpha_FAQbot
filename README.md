@@ -32,6 +32,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 python -m scripts.setup_nltk      # one-time NLTK data download
 python -m scripts.validate_data   # validate FAQ + evaluation datasets
+python -m scripts.preprocess_demo    # see the NLP pipeline stage by stage
 pytest                            # run the test suite
 flake8 . && black --check .       # lint and format checks (also enforced in CI)
 ```
@@ -52,8 +53,8 @@ review. See `.github/pull_request_template.md`.
 
 | Sprint | Days | Focus | Status |
 |---|---|---|---|
-| 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | In review |
-| 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script | Planned |
+| 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | Done (pending GitHub setup) |
+| 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script | In progress (preprocessing done) |
 | 3 | 6-7 | Flask API, logging, error handling, chat UI | Planned |
 | 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | Planned |
 
