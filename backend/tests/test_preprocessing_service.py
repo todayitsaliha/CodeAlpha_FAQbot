@@ -102,7 +102,7 @@ class TestPreprocessing:
         assert "30" in service.preprocess("Returns within 30 days")
 
     def test_slang_is_normalised(self, service):
-        assert service.preprocess("do u ship abroad") == ["ship", "abroad"]
+        assert service.preprocess("do u ship abroad") == ["ship", "international"]
 
     def test_chatter_is_removed(self, service):
         assert service.preprocess("Hello, please track my order thanks") == [
@@ -171,3 +171,38 @@ class TestSetupFailure:
         )
         with pytest.raises(PreprocessingSetupError, match="scripts.setup_nltk"):
             PreprocessingService()
+
+
+class TestSynonyms:
+    def test_every_synonym_variant_is_already_a_lemma(self, service):
+        """Variants are looked up after lemmatisation, so they must be lemma forms."""
+        from app.services.synonyms import SYNONYMS
+
+        not_lemmas = [v for v in SYNONYMS if service._lemmatize(v) != v]
+        assert not_lemmas == []
+
+    def test_no_synonym_maps_to_another_variant(self):
+        from app.services.synonyms import SYNONYMS
+
+        assert not set(SYNONYMS.values()) & set(SYNONYMS)
+
+    @pytest.mark.parametrize(
+        "variant, canonical",
+        [
+            ("erase my account", "delete my account"),
+            (
+                "I want a refund for the broken item",
+                "I want a refund for the faulty item",
+            ),
+            ("Do you ship overseas?", "Do you ship abroad?"),
+            ("my parcel is late", "my package is late"),
+        ],
+    )
+    def test_synonymous_phrasings_normalise_identically(
+        self, service, variant, canonical
+    ):
+        assert service.preprocess(variant) == service.preprocess(canonical)
+
+    def test_distinct_concepts_are_not_merged(self, service):
+        assert service.preprocess("refund") != service.preprocess("exchange")
+        assert service.preprocess("delivery") != service.preprocess("return")

@@ -23,12 +23,15 @@ the chatbot service treats that as "no match" and returns the fallback.
 | Slang map | `u`, `ur`, `pls`, `plz`, `thx` | Small, unambiguous set only |
 | Drop one-letter tokens and stop words | NLTK English list **minus** negations and `before/after/over/under/off/out/up/down`; plus filler such as `hello`, `please`, `thanks` | `not`/`no` flip meaning; `sign up` and `out of stock` lose meaning without the particles |
 | Lemmatise | WordNet, verb form first, then noun form | `shipped`, `shipping` and `ships` become `ship`; `cards` becomes `card` without needing a POS tagger |
+| Synonym map (`synonyms.py`) | `erase` -> `delete`, `parcel` -> `package`, `abroad` -> `international`, `broken` -> `defective`... | TF-IDF cannot match different words; applied after lemmatising on both FAQ and user side |
 
 ## Known limitations (handled elsewhere)
 
-- **No spell correction.** `cancle`, `delivry` and `shiping` pass through unchanged.
-  The matching engine (next task) will add character n-gram features alongside
-  word TF-IDF to recover typo-ridden queries.
+- **No spell correction here.** Typos pass through this stage unchanged; the matching
+  engine corrects non-words against the FAQ vocabulary and adds character n-gram
+  features (see `matching-engine.md`).
+- **The synonym map does not generalise well yet.** It was written with dev-set failures
+  in view and showed no measured gain on held-out questions.
 - **Greetings are not interpreted here.** `hello` is filtered as filler. Greeting,
   thanks and goodbye intents are detected before preprocessing by the intent service.
 - **Numbers are kept as plain tokens.** `9.99` becomes `9` and `99`; acceptable

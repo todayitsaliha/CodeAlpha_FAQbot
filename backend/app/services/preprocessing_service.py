@@ -10,6 +10,7 @@ Pipeline:
     3. filter    - normalise slang, drop one-letter tokens and stop words
                    (negations and a few meaning-bearing function words are kept)
     4. lemmatize - WordNet lemmatizer (verb form first, then noun form)
+    5. synonyms  - map interchangeable domain words to one canonical word
 """
 
 import re
@@ -18,6 +19,8 @@ import unicodedata
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+
+from app.services.synonyms import SYNONYMS
 
 # Negations flip the meaning of a question ("can I cancel" vs "I cannot cancel"),
 # so they must survive stop-word removal.
@@ -111,7 +114,8 @@ class PreprocessingService:
             if token not in self._stop_words
             and not (len(token) == 1 and token.isalpha())
         )
-        return [self._lemmatize(token) for token in kept]
+        lemmas = (self._lemmatize(token) for token in kept)
+        return [SYNONYMS.get(lemma, lemma) for lemma in lemmas]
 
     def preprocess_to_text(self, text: str) -> str:
         """Return the tokens joined by spaces, ready for a TF-IDF vectoriser."""
