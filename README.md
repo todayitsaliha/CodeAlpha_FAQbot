@@ -19,7 +19,7 @@ backend/              Python application (3-tier: controllers / services / repos
   scripts/            setup_nltk, validate_data, evaluate (Sprint 2), CLI client (Sprint 2)
   tests/              pytest suite
 frontend/             Static chat UI (Sprint 3)
-docs/                 Acceptance criteria, STS change log
+docs/                 Acceptance criteria, STS change log, preprocessing and matching design notes
 ```
 
 ## Getting started
@@ -33,6 +33,7 @@ pip install -r requirements-dev.txt
 python -m scripts.setup_nltk      # one-time NLTK data download
 python -m scripts.validate_data   # validate FAQ + evaluation datasets
 python -m scripts.preprocess_demo    # see the NLP pipeline stage by stage
+python -m scripts.evaluate --verbose # measure accuracy on the evaluation set
 pytest                            # run the test suite
 flake8 . && black --check .       # lint and format checks (also enforced in CI)
 ```
@@ -54,7 +55,7 @@ review. See `.github/pull_request_template.md`.
 | Sprint | Days | Focus | Status |
 |---|---|---|---|
 | 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | Done (pending GitHub setup) |
-| 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script | In progress (preprocessing done) |
+| 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script | In progress (preprocessing, matching, evaluation done; intents and CLI next) |
 | 3 | 6-7 | Flask API, logging, error handling, chat UI | Planned |
 | 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | Planned |
 
