@@ -184,3 +184,21 @@ class TestSetupAndHelpers:
 
     def test_welcome_message_is_the_greeting(self, bot):
         assert bot.welcome_message() == bot.ask("hello").answer
+
+
+class TestRedaction:
+    @pytest.mark.parametrize(
+        "text, expected",
+        [
+            ("mail me at jane.doe@example.com please", "mail me at [email] please"),
+            ("call 1-800-555-0199 now", "call [number] now"),
+            ("card 4111 1111 1111 1111", "card [number]"),
+            ("order 20261020 is late", "order [number] is late"),
+            ("returns within 30 days", "returns within 30 days"),
+            ("takes 3-5 business days", "takes 3-5 business days"),
+        ],
+    )
+    def test_redact(self, text, expected):
+        from app.services.chatbot_service import redact
+
+        assert redact(text) == expected

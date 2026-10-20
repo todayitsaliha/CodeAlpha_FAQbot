@@ -5,6 +5,7 @@ section 6.3. This is the single entry point the API layer and the CLI both call.
 """
 
 import logging
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -37,6 +38,13 @@ INTENT_REPLIES = {
     Intent.GOODBYE: "Goodbye! Come back any time you have a question.",
 }
 _LOG_PREVIEW_CHARS = 120
+_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+_NUMBER_RE = re.compile(r"\d[\d\s().-]{4,}\d")  # phones, card and order numbers
+
+
+def redact(text: str) -> str:
+    """Mask emails and long digit runs so personal data never reaches the logs."""
+    return _NUMBER_RE.sub("[number]", _EMAIL_RE.sub("[email]", text))
 
 
 class InvalidMessageError(ValueError):
@@ -171,7 +179,7 @@ class ChatbotService:
         # %r escapes control characters so user input cannot forge log lines.
         logger.info(
             "chat question=%r kind=%s faq_id=%s confidence=%.2f fallback=%s %s",
-            text[:_LOG_PREVIEW_CHARS],
+            redact(text)[:_LOG_PREVIEW_CHARS],
             response.kind,
             response.faq_id,
             response.confidence,
