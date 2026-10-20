@@ -12,14 +12,14 @@ Specification: *Software Technical Specification (STS) v1.0*, re-baselined to a
 
 ```
 backend/              Python application (3-tier: controllers / services / repositories)
-  app/controllers/    HTTP layer (Sprint 3)
+  app/controllers/    HTTP layer: routes, error handling, request hooks
   app/services/       Preprocessing, synonyms, intents, matching, chatbot service
   app/repositories/   FAQ + evaluation data access and validation
   data/               faqs.json, test_questions.json
   scripts/            setup_nltk, validate_data, evaluate, tune_thresholds, chat_cli
   tests/              pytest suite
 frontend/             Static chat UI (Sprint 3)
-docs/                 Acceptance criteria, STS change log, design notes (preprocessing, matching, chatbot service)
+docs/                 Acceptance criteria, STS change log, design notes (preprocessing, matching, chatbot service, API)
 ```
 
 ## Getting started
@@ -48,6 +48,7 @@ python -m scripts.setup_nltk          # one-time NLTK data download
 Then, in either shell (from `backend/`):
 
 ```
+python run.py                             # start the API server on http://127.0.0.1:5000
 python -m scripts.chat_cli                # talk to the chatbot in the terminal
 python -m scripts.chat_cli --ask "Do you ship abroad?" --debug
 python -m scripts.validate_data           # validate FAQ + evaluation datasets
@@ -75,7 +76,7 @@ review. See `.github/pull_request_template.md`.
 |---|---|---|---|
 | 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | Done (pending GitHub setup) |
 | 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script, CLI client | Done; 80% accuracy target still open (see `docs/matching-engine.md`) |
-| 3 | 6-7 | Flask API, logging, error handling, chat UI | Planned |
+| 3 | 6-7 | Flask API, logging, error handling, chat UI | In progress (API done; chat UI next) |
 | 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | Planned |
 
 ## Dataset note
