@@ -13,29 +13,48 @@ Specification: *Software Technical Specification (STS) v1.0*, re-baselined to a
 ```
 backend/              Python application (3-tier: controllers / services / repositories)
   app/controllers/    HTTP layer (Sprint 3)
-  app/services/       Preprocessing, intent, matching, chatbot (Sprint 2)
+  app/services/       Preprocessing, synonyms, intents, matching, chatbot service
   app/repositories/   FAQ + evaluation data access and validation
   data/               faqs.json, test_questions.json
-  scripts/            setup_nltk, validate_data, evaluate (Sprint 2), CLI client (Sprint 2)
+  scripts/            setup_nltk, validate_data, evaluate, tune_thresholds, chat_cli
   tests/              pytest suite
 frontend/             Static chat UI (Sprint 3)
-docs/                 Acceptance criteria, STS change log, preprocessing and matching design notes
+docs/                 Acceptance criteria, STS change log, design notes (preprocessing, matching, chatbot service)
 ```
 
 ## Getting started
 
-Requires Python 3.10+.
+Python 3.10+ is required. This is a **Python** project: use `pip`, not `npm`.
+
+**Linux / macOS**
 
 ```bash
 cd backend
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
-python -m scripts.setup_nltk      # one-time NLTK data download
-python -m scripts.validate_data   # validate FAQ + evaluation datasets
-python -m scripts.preprocess_demo    # see the NLP pipeline stage by stage
-python -m scripts.evaluate --verbose # measure accuracy on the evaluation set
-pytest                            # run the test suite
-flake8 . && black --check .       # lint and format checks (also enforced in CI)
+python -m scripts.setup_nltk          # one-time NLTK data download
+```
+
+**Windows (PowerShell)**
+
+```powershell
+cd backend
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1        # if blocked: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+pip install -r requirements-dev.txt
+python -m scripts.setup_nltk          # one-time NLTK data download
+```
+
+Then, in either shell (from `backend/`):
+
+```
+python -m scripts.chat_cli                # talk to the chatbot in the terminal
+python -m scripts.chat_cli --ask "Do you ship abroad?" --debug
+python -m scripts.validate_data           # validate FAQ + evaluation datasets
+python -m scripts.preprocess_demo         # see the NLP pipeline stage by stage
+python -m scripts.evaluate --verbose      # measure accuracy on the evaluation set
+pytest                                    # run the test suite
+flake8 . && black --check .               # lint and format checks (also enforced in CI)
 ```
 
 ## Branching strategy
@@ -55,7 +74,7 @@ review. See `.github/pull_request_template.md`.
 | Sprint | Days | Focus | Status |
 |---|---|---|---|
 | 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | Done (pending GitHub setup) |
-| 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script | In progress (preprocessing, matching, evaluation done; intents and CLI next) |
+| 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script, CLI client | Done; 80% accuracy target still open (see `docs/matching-engine.md`) |
 | 3 | 6-7 | Flask API, logging, error handling, chat UI | Planned |
 | 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | Planned |
 
