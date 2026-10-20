@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FAQ Chat</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="defs" aria-hidden="true" focusable="false">
+    <symbol id="bot" viewBox="0 0 16 16" shape-rendering="crispEdges">
+      <path fill="#2f6fc4" d="M7 0h2v2H7z"/>
+      <path fill="#2a5fb0" d="M2 2h12v7H2zM4 9h8v4H4zM2 10h2v2H2zM12 10h2v2h-2zM5 13h2v2H5zM9 13h2v2H9z"/>
+      <path fill="#e3b341" d="M1 4h1v3H1zM14 4h1v3h-1z"/>
+      <path fill="#f4f1ea" d="M3 3h10v5H3z"/>
+      <path fill="#1d3f73" d="M5 4h1v2H5zM10 4h1v2h-1zM6 6h1v1H6zM7 7h2v1H7zM9 6h1v1H9z"/>
+      <path fill="#7fb0e8" d="M6 10h4v2H6z"/>
+    </symbol>
+    <symbol id="plane" viewBox="0 0 24 24"><path fill="currentColor" d="M2 21l21-9L2 3v7l15 2-15 2z"/></symbol>
+    <symbol id="chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M4 4h16v12H9l-5 4zM8 9h8M8 12h5"/></symbol>
+    <symbol id="person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.5" fill="currentColor"/><path fill="currentColor" d="M3 22c0-5 4-8 9-8s9 3 9 8z"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor"/><path fill="none" stroke="#fff" stroke-width="2.5" d="M7 12.5l3.5 3.5L17 9"/></symbol>
+  </svg>
+
+  <main class="chat">
+    <header class="top">
+      <h1><svg class="icon"><use href="#chat"/></svg>FAQ Chat</h1>
+      <p id="status" class="status" role="status"><span class="dot"></span><span id="status-text">Connecting</span></p>
+    </header>
+    <div id="log" class="log" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation"></div>
+    <form id="form" class="composer" autocomplete="off">
+      <label class="sr" for="input">Your question</label>
+      <input id="input" name="message" maxlength="500" placeholder="Ask a question…" required>
+      <button id="send" type="submit" aria-label="Send question"><svg class="icon"><use href="#plane"/></svg></button>
+    </form>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>

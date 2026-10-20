@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 
 from flask import Flask, send_from_directory
+from werkzeug.routing import PathConverter
 
 from app import config
 from app.controllers.api import api
@@ -31,12 +32,20 @@ def _load_chatbot(faq_path: str | Path) -> tuple[ChatbotService | None, str | No
         return None, str(exc)
 
 
+class AssetPath(PathConverter):
+    """A file path that never starts with api/, so API routes keep their own 404/405."""
+
+    regex = r"(?!api(?:/|$))[^/].*?"
+
+
 def _register_frontend(app: Flask, frontend_dir: Path) -> None:
+    app.url_map.converters["asset"] = AssetPath
+
     @app.get("/")
     def index():
         return send_from_directory(frontend_dir, "index.html")
 
-    @app.get("/<path:filename>")
+    @app.get("/<asset:filename>")
     def frontend_asset(filename: str):
         return send_from_directory(frontend_dir, filename)
 
