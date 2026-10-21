@@ -6,6 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 FAQ_PATH = DATA_DIR / "faqs.json"
 EVALUATION_PATH = DATA_DIR / "test_questions.json"
+# Written after the tuning work, used only for final reporting (never for tuning).
+FINAL_EVALUATION_PATH = DATA_DIR / "final_questions.json"
 
 # Request limits (STS section 6.2)
 MIN_MESSAGE_LENGTH = 1
@@ -27,3 +29,11 @@ FRONTEND_DIR = BASE_DIR.parent / "frontend"
 MAX_REQUEST_BYTES = 8 * 1024  # a 500-character message is far below this
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 5000
+
+# Semantic (word-vector) profile, used when the spaCy model is installed. Tuned on the
+# dev split with scripts/tune_thresholds.py; see docs/matching-engine.md.
+SPACY_MODEL = "en_core_web_md"
+SEMANTIC_WEIGHT = 0.40  # share of the final score that comes from word vectors
+SEMANTIC_WORD_WEIGHT = 0.20
+SEMANTIC_ANSWER_THRESHOLD = 0.70
+SEMANTIC_SUGGESTION_THRESHOLD = 0.40

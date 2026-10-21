@@ -34,6 +34,8 @@ jobs:
         run: pytest
       - name: Validate FAQ data
         run: python -m scripts.validate_data
-      # Regression floor only. The 80% target is tracked in docs/matching-engine.md.
-      - name: Accuracy regression floor
-        run: python -m scripts.evaluate --min-top1 0.65
+      # Regression floors only. The 80% target is tracked in docs/matching-engine.md.
+      - name: Accuracy regression floor (main set)
+        run: python -m scripts.evaluate --min-top1 0.70
+      - name: Accuracy regression floor (final held-out set)
+        run: python -m scripts.evaluate --dataset final --min-top1 0.30

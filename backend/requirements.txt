@@ -2,3 +2,5 @@ flask>=3.0,<4
 nltk>=3.9,<4
 scikit-learn>=1.4,<2
 waitress>=3.0,<4
+spacy>=3.7,<3.9
+en_core_web_md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0-py3-none-any.whl

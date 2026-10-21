@@ -18,9 +18,11 @@ from app.repositories.evaluation_repository import EvaluationRepository
 from app.repositories.faq_repository import FaqRepository
 from app.services.matching_service import MatchingService, MatchingSettings
 from app.services.preprocessing_service import PreprocessingService
+from app.services.semantic_service import SemanticModel
 from scripts.evaluate import evaluate, split_cases
 
-WEIGHTS = (0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0)
+WEIGHTS = (0.2, 0.4, 0.6)
+SEMANTIC_WEIGHTS = (0.0, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
 ANSWER_THRESHOLDS = tuple(round(0.30 + 0.05 * i, 2) for i in range(11))
 SUGGESTION_THRESHOLDS = tuple(round(0.10 + 0.05 * i, 2) for i in range(9))
 
@@ -33,15 +35,16 @@ def main(argv: list[str] | None = None) -> int:
     faqs = FaqRepository(config.FAQ_PATH).load()
     cases = EvaluationRepository(config.EVALUATION_PATH, (f.id for f in faqs)).load()
     dev, test = split_cases(cases, "dev"), split_cases(cases, "test")
-    base = MatchingService(faqs, PreprocessingService())
+    semantic = SemanticModel.load()
+    base = MatchingService(faqs, PreprocessingService(), semantic=semantic)
 
     results = []
-    for weight, answer, suggest in itertools.product(
-        WEIGHTS, ANSWER_THRESHOLDS, SUGGESTION_THRESHOLDS
+    for weight, sem, answer, suggest in itertools.product(
+        WEIGHTS, SEMANTIC_WEIGHTS, ANSWER_THRESHOLDS, SUGGESTION_THRESHOLDS
     ):
-        if suggest > answer:
+        if suggest > answer or (semantic is None and sem > 0):
             continue
-        settings = MatchingSettings(answer, suggest, weight)
+        settings = MatchingSettings(answer, suggest, weight, semantic_weight=sem)
         report = evaluate(base.with_settings(settings), dev)
         wrong = report.answered_wrong + report.oos_answered
         results.append(
@@ -59,7 +62,8 @@ def main(argv: list[str] | None = None) -> int:
     for utility, neg_wrong, correct, s, report in results[:5]:
         print(
             f"  utility={utility:+.3f} wrong={-neg_wrong} correct={correct} "
-            f"top1={report.top1_accuracy:.1%} | weight={s.word_weight} "
+            f"top1={report.top1_accuracy:.1%} | word={s.word_weight} "
+            f"semantic={s.semantic_weight} "
             f"answer={s.answer_threshold} suggest={s.suggestion_threshold}"
         )
 

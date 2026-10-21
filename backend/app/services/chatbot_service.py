@@ -18,6 +18,7 @@ from app.services.matching_service import (
     MatchStatus,
 )
 from app.services.preprocessing_service import PreprocessingService
+from app.services.semantic_service import SemanticModel
 
 logger = logging.getLogger(__name__)
 
@@ -88,10 +89,11 @@ class ChatbotService:
         faqs: list[Faq],
         preprocessor: PreprocessingService | None = None,
         settings: MatchingSettings | None = None,
+        semantic: SemanticModel | None = None,
     ):
         self._faqs = list(faqs)
         preprocessor = preprocessor or PreprocessingService()
-        self._matcher = MatchingService(self._faqs, preprocessor, settings)
+        self._matcher = MatchingService(self._faqs, preprocessor, settings, semantic)
         self._intents = IntentService(preprocessor)
         # Topic names come from the data, so the bot adapts to any FAQ domain.
         self._categories = list(dict.fromkeys(f.category for f in faqs if f.category))
@@ -100,7 +102,7 @@ class ChatbotService:
     @classmethod
     def from_data(cls, faq_path: str | Path = config.FAQ_PATH) -> "ChatbotService":
         """Load, validate and index the FAQ file. Raises FaqDataError on bad data."""
-        return cls(FaqRepository(faq_path).load())
+        return cls(FaqRepository(faq_path).load(), semantic=SemanticModel.load())
 
     @property
     def faq_count(self) -> int:

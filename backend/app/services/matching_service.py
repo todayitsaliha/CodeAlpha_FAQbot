@@ -28,6 +28,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from app import config
 from app.repositories.faq_repository import Faq
 from app.services.preprocessing_service import PreprocessingService
+from app.services.semantic_service import SemanticIndex, SemanticModel
 
 TYPO_MIN_LENGTH = 5  # shorter words are too ambiguous to correct safely
 TYPO_CUTOFF = 0.8  # difflib similarity required to accept a correction
@@ -47,6 +48,19 @@ class MatchingSettings:
     suggestion_threshold: float = config.SUGGESTION_THRESHOLD
     word_weight: float = config.WORD_WEIGHT
     max_suggestions: int = config.MAX_SUGGESTIONS
+    semantic_weight: float = 0.0  # share of the score from word vectors (0 = off)
+
+    @classmethod
+    def default(cls, semantic: bool) -> "MatchingSettings":
+        """The tuned profile for TF-IDF-only or TF-IDF plus word vectors."""
+        if not semantic:
+            return cls()
+        return cls(
+            answer_threshold=config.SEMANTIC_ANSWER_THRESHOLD,
+            suggestion_threshold=config.SEMANTIC_SUGGESTION_THRESHOLD,
+            word_weight=config.SEMANTIC_WORD_WEIGHT,
+            semantic_weight=config.SEMANTIC_WEIGHT,
+        )
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.suggestion_threshold <= self.answer_threshold <= 1.0:
@@ -56,6 +70,8 @@ class MatchingSettings:
             )
         if not 0.0 <= self.word_weight <= 1.0:
             raise ValueError("word_weight must be between 0 and 1")
+        if not 0.0 <= self.semantic_weight <= 1.0:
+            raise ValueError("semantic_weight must be between 0 and 1")
         if self.max_suggestions < 1:
             raise ValueError("max_suggestions must be at least 1")
 
@@ -84,12 +100,13 @@ class MatchingService:
         faqs: Iterable[Faq],
         preprocessor: PreprocessingService,
         settings: MatchingSettings | None = None,
+        semantic: SemanticModel | None = None,
     ):
         self._faqs = list(faqs)
         if not self._faqs:
             raise ValueError("MatchingService needs at least one FAQ")
         self._preprocessor = preprocessor
-        self.settings = settings or MatchingSettings()
+        self.settings = settings or MatchingSettings.default(semantic is not None)
 
         texts: list[str] = []
         starts: list[int] = []
@@ -116,6 +133,16 @@ class MatchingService:
         )
         self._word_matrix = self._word_vectorizer.fit_transform(texts)
         self._char_matrix = self._char_vectorizer.fit_transform(texts)
+        self._semantic_index = None
+        if semantic is not None:
+            idf = {
+                term: float(self._word_vectorizer.idf_[i])
+                for term, i in self._word_vectorizer.vocabulary_.items()
+                if " " not in term
+            }
+            self._semantic_index = SemanticIndex(
+                semantic, [text.split() for text in texts], idf, self._starts
+            )
         self._component_scores = lru_cache(maxsize=2048)(self._compute_scores)
 
     def with_settings(self, settings: MatchingSettings) -> "MatchingService":
@@ -126,9 +153,11 @@ class MatchingService:
 
     def rank(self, text: str, k: int | None = None) -> list[Match]:
         """Return FAQs ordered by score (best first), ignoring all thresholds."""
-        word, char = self._component_scores(text)
+        word, char, semantic = self._component_scores(text)
         weight = self.settings.word_weight
-        scores = weight * word + (1.0 - weight) * char
+        lexical = weight * word + (1.0 - weight) * char
+        share = self.settings.semantic_weight if self._semantic_index else 0.0
+        scores = (1.0 - share) * lexical + share * semantic
         order = np.argsort(-scores, kind="stable")
         limit = len(order) if k is None else k
         return [
@@ -154,12 +183,12 @@ class MatchingService:
             )
         return MatchResult(MatchStatus.FALLBACK, top_score=top)
 
-    def _compute_scores(self, text: str) -> tuple[np.ndarray, np.ndarray]:
-        """Per-FAQ word and character cosine scores (max over each FAQ's phrasings)."""
+    def _compute_scores(self, text: str) -> tuple[np.ndarray, ...]:
+        """Per-FAQ word, character and semantic scores (best phrasing of each FAQ)."""
         processed = self._preprocessor.preprocess_to_text(self._correct_typos(text))
         if not processed:
             zeros = np.zeros(len(self._faqs))
-            return zeros, zeros
+            return zeros, zeros, zeros
 
         def per_faq(matrix, vectorizer) -> np.ndarray:
             sims = (matrix @ vectorizer.transform([processed]).T).toarray().ravel()
@@ -167,9 +196,15 @@ class MatchingService:
             best.setflags(write=False)
             return best
 
+        semantic = (
+            self._semantic_index.faq_scores(processed.split())
+            if self._semantic_index
+            else np.zeros(len(self._faqs))
+        )
         return (
             per_faq(self._word_matrix, self._word_vectorizer),
             per_faq(self._char_matrix, self._char_vectorizer),
+            semantic,
         )
 
     def _correct_typos(self, text: str) -> str:

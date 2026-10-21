@@ -19,6 +19,7 @@ from app.repositories.evaluation_repository import EvaluationCase, EvaluationRep
 from app.repositories.faq_repository import FaqRepository
 from app.services.matching_service import MatchingService, MatchStatus
 from app.services.preprocessing_service import PreprocessingService
+from app.services.semantic_service import SemanticModel
 
 
 def split_cases(cases: list[EvaluationCase], split: str) -> list[EvaluationCase]:
@@ -165,7 +166,16 @@ def print_report(report: EvaluationReport, label: str, verbose: bool) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--split", choices=("all", "dev", "test"), default="all")
+    parser.add_argument(
+        "--dataset",
+        choices=("main", "final"),
+        default="main",
+        help="'final' is reserved for the last report (ignores --split)",
+    )
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument(
+        "--no-semantic", action="store_true", help="TF-IDF only (skip word vectors)"
+    )
     parser.add_argument(
         "--min-top1",
         type=float,
@@ -175,11 +185,20 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     faqs = FaqRepository(config.FAQ_PATH).load()
-    cases = EvaluationRepository(config.EVALUATION_PATH, (f.id for f in faqs)).load()
-    matcher = MatchingService(faqs, PreprocessingService())
+    path = (
+        config.FINAL_EVALUATION_PATH
+        if args.dataset == "final"
+        else config.EVALUATION_PATH
+    )
+    cases = EvaluationRepository(path, (f.id for f in faqs)).load()
+    semantic = None if args.no_semantic else SemanticModel.load()
+    matcher = MatchingService(faqs, PreprocessingService(), semantic=semantic)
 
-    report = evaluate(matcher, split_cases(cases, args.split))
-    print_report(report, args.split, args.verbose)
+    split = "all" if args.dataset == "final" else args.split
+    report = evaluate(matcher, split_cases(cases, split))
+    print_report(
+        report, "final held-out" if args.dataset == "final" else split, args.verbose
+    )
 
     if args.min_top1 is not None and report.top1_accuracy < args.min_top1:
         print(
