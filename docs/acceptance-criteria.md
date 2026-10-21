@@ -19,7 +19,8 @@ Source: STS v1.0, re-baselined to a 2-week / 4-sprint delivery.
 ## Non-functional targets
 
 - Top-1 accuracy of at least 80% on in-scope evaluation questions (confirmed with client).
-  **Status:** not yet met on held-out data (61% test, 72% all cases); see `matching-engine.md`.
+  **Status:** not met. 78% on FAQ-style questions, about 38% on conversational questions
+  (fresh held-out set); see `matching-engine.md`.
 - Out-of-scope evaluation questions receive the fallback, not a wrong answer.
 - Typical response time well under one second; startup within a few seconds.
 - CI gates on every PR: flake8, Black, pytest (and the evaluation run from Sprint 2).

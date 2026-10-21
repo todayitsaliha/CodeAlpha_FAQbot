@@ -10,6 +10,7 @@ from app import config
 from app.repositories.evaluation_repository import (
     EvaluationRepository,
     find_leaked_cases,
+    normalise_for_comparison,
 )
 from app.repositories.faq_repository import FaqDataError, FaqRepository
 
@@ -22,9 +23,9 @@ def _fail(message: str) -> int:
 def main() -> int:
     try:
         faqs = FaqRepository(config.FAQ_PATH).load()
-        cases = EvaluationRepository(
-            config.EVALUATION_PATH, (faq.id for faq in faqs)
-        ).load()
+        ids = [faq.id for faq in faqs]
+        cases = EvaluationRepository(config.EVALUATION_PATH, ids).load()
+        final = EvaluationRepository(config.FINAL_EVALUATION_PATH, ids).load()
     except FaqDataError as exc:
         return _fail(str(exc))
 
@@ -40,6 +41,15 @@ def main() -> int:
             + ", ".join(leaked)
         )
 
+    seen = {normalise_for_comparison(c.question) for c in cases}
+    repeated = [c.id for c in final if normalise_for_comparison(c.question) in seen]
+    leaked_final = find_leaked_cases(final, faqs)
+    if repeated or leaked_final:
+        return _fail(
+            "final held-out set overlaps other data: "
+            + ", ".join(repeated + leaked_final)
+        )
+
     categories = Counter(faq.category or "(uncategorised)" for faq in faqs)
     alt_total = sum(len(faq.alt_questions) for faq in faqs)
     out_of_scope = sum(case.is_out_of_scope for case in cases)
@@ -52,6 +62,7 @@ def main() -> int:
         f"({len(cases) - out_of_scope} in-scope, {out_of_scope} out-of-scope), "
         "no phrasing leakage"
     )
+    print(f"Final held-out set OK: {len(final)} cases, disjoint from all other data")
     return 0
 
 
