@@ -25,7 +25,10 @@ def main() -> int:
         faqs = FaqRepository(config.FAQ_PATH).load()
         ids = [faq.id for faq in faqs]
         cases = EvaluationRepository(config.EVALUATION_PATH, ids).load()
-        final = EvaluationRepository(config.FINAL_EVALUATION_PATH, ids).load()
+        finals = {
+            "final": EvaluationRepository(config.FINAL_EVALUATION_PATH, ids).load(),
+            "final2": EvaluationRepository(config.FINAL2_EVALUATION_PATH, ids).load(),
+        }
     except FaqDataError as exc:
         return _fail(str(exc))
 
@@ -42,13 +45,16 @@ def main() -> int:
         )
 
     seen = {normalise_for_comparison(c.question) for c in cases}
-    repeated = [c.id for c in final if normalise_for_comparison(c.question) in seen]
-    leaked_final = find_leaked_cases(final, faqs)
-    if repeated or leaked_final:
-        return _fail(
-            "final held-out set overlaps other data: "
-            + ", ".join(repeated + leaked_final)
-        )
+    for name, final in finals.items():
+        norm = normalise_for_comparison
+        repeated = [c.id for c in final if norm(c.question) in seen]
+        leaked_final = find_leaked_cases(final, faqs)
+        if repeated or leaked_final:
+            return _fail(
+                f"held-out set '{name}' overlaps other data: "
+                + ", ".join(repeated + leaked_final)
+            )
+        seen |= {normalise_for_comparison(c.question) for c in final}
 
     categories = Counter(faq.category or "(uncategorised)" for faq in faqs)
     alt_total = sum(len(faq.alt_questions) for faq in faqs)
@@ -62,7 +68,11 @@ def main() -> int:
         f"({len(cases) - out_of_scope} in-scope, {out_of_scope} out-of-scope), "
         "no phrasing leakage"
     )
-    print(f"Final held-out set OK: {len(final)} cases, disjoint from all other data")
+    for name, final in finals.items():
+        print(
+            f"Held-out set '{name}' OK: {len(final)} cases, "
+            "disjoint from all other data"
+        )
     return 0
 
 

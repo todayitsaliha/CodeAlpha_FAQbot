@@ -30,12 +30,22 @@ SUGGESTION_THRESHOLDS = tuple(round(0.10 + 0.05 * i, 2) for i in range(9))
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--report-test", action="store_true")
+    parser.add_argument(
+        "--no-semantic", action="store_true", help="tune the TF-IDF-only profile"
+    )
+    parser.add_argument(
+        "--max-wrong",
+        type=int,
+        default=None,
+        help="safety constraint: only consider settings with at most this many "
+        "wrong answers (in-scope wrong + out-of-scope answered) on dev",
+    )
     args = parser.parse_args(argv)
 
     faqs = FaqRepository(config.FAQ_PATH).load()
     cases = EvaluationRepository(config.EVALUATION_PATH, (f.id for f in faqs)).load()
     dev, test = split_cases(cases, "dev"), split_cases(cases, "test")
-    semantic = SemanticModel.load()
+    semantic = None if args.no_semantic else SemanticModel.load()
     base = MatchingService(faqs, PreprocessingService(), semantic=semantic)
 
     results = []
@@ -56,6 +66,8 @@ def main(argv: list[str] | None = None) -> int:
                 report,
             )
         )
+    if args.max_wrong is not None:
+        results = [r for r in results if -r[1] <= args.max_wrong]
     results.sort(key=lambda r: r[:3], reverse=True)
 
     print("Top 5 settings on dev:")

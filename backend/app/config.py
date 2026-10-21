@@ -8,6 +8,9 @@ FAQ_PATH = DATA_DIR / "faqs.json"
 EVALUATION_PATH = DATA_DIR / "test_questions.json"
 # Written after the tuning work, used only for final reporting (never for tuning).
 FINAL_EVALUATION_PATH = DATA_DIR / "final_questions.json"
+# Second held-out set, written in different styles (keywords, typos, long stories)
+# before the conversational phrasings were measured. The headline accuracy source.
+FINAL2_EVALUATION_PATH = DATA_DIR / "final_questions_v2.json"
 
 # Request limits (STS section 6.2)
 MIN_MESSAGE_LENGTH = 1
@@ -20,7 +23,7 @@ MIN_FAQ_COUNT = 50
 # set with scripts/tune_thresholds.py. Values are the centre of the best-scoring
 # plateau, not the single argmax, to avoid overfitting. See docs/matching-engine.md.
 ANSWER_THRESHOLD = 0.70  # best score at or above this returns the FAQ answer
-SUGGESTION_THRESHOLD = 0.35  # between the two thresholds, suggest similar questions
+SUGGESTION_THRESHOLD = 0.30  # between the two thresholds, suggest similar questions
 WORD_WEIGHT = 0.40  # blend of word TF-IDF vs character TF-IDF (1 - WORD_WEIGHT)
 MAX_SUGGESTIONS = 3
 
@@ -33,7 +36,7 @@ DEFAULT_PORT = 5000
 # Semantic (word-vector) profile, used when the spaCy model is installed. Tuned on the
 # dev split with scripts/tune_thresholds.py; see docs/matching-engine.md.
 SPACY_MODEL = "en_core_web_md"
-SEMANTIC_WEIGHT = 0.40  # share of the final score that comes from word vectors
-SEMANTIC_WORD_WEIGHT = 0.20
-SEMANTIC_ANSWER_THRESHOLD = 0.70
-SEMANTIC_SUGGESTION_THRESHOLD = 0.40
+SEMANTIC_WEIGHT = 0.50  # share of the final score that comes from word vectors
+SEMANTIC_WORD_WEIGHT = 0.40
+SEMANTIC_ANSWER_THRESHOLD = 0.65
+SEMANTIC_SUGGESTION_THRESHOLD = 0.45
