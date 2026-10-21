@@ -79,7 +79,7 @@ review. See `.github/pull_request_template.md`.
 | 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | Done (pending GitHub setup) |
 | 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script, CLI client | Done; 80% accuracy target still open (see `docs/matching-engine.md`) |
 | 3 | 6-7 | Flask API, logging, error handling, chat UI | Done; UI awaiting visual review in a browser |
-| 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | In progress (word vectors and final held-out set done; accuracy target still open) |
+| 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | In progress (accuracy work done; target met on FAQ-style input only; release tasks next) |
 
 ## Dataset note
 

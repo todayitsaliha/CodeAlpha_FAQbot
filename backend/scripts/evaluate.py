@@ -21,6 +21,12 @@ from app.services.matching_service import MatchingService, MatchStatus
 from app.services.preprocessing_service import PreprocessingService
 from app.services.semantic_service import SemanticModel
 
+DATASETS = {
+    "main": config.EVALUATION_PATH,
+    "final": config.FINAL_EVALUATION_PATH,
+    "final2": config.FINAL2_EVALUATION_PATH,
+}
+
 
 def split_cases(cases: list[EvaluationCase], split: str) -> list[EvaluationCase]:
     if split == "dev":
@@ -168,7 +174,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--split", choices=("all", "dev", "test"), default="all")
     parser.add_argument(
         "--dataset",
-        choices=("main", "final"),
+        choices=("main", "final", "final2"),
         default="main",
         help="'final' is reserved for the last report (ignores --split)",
     )
@@ -185,20 +191,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     faqs = FaqRepository(config.FAQ_PATH).load()
-    path = (
-        config.FINAL_EVALUATION_PATH
-        if args.dataset == "final"
-        else config.EVALUATION_PATH
-    )
+    path = DATASETS[args.dataset]
     cases = EvaluationRepository(path, (f.id for f in faqs)).load()
     semantic = None if args.no_semantic else SemanticModel.load()
     matcher = MatchingService(faqs, PreprocessingService(), semantic=semantic)
 
-    split = "all" if args.dataset == "final" else args.split
+    split = args.split if args.dataset == "main" else "all"
     report = evaluate(matcher, split_cases(cases, split))
-    print_report(
-        report, "final held-out" if args.dataset == "final" else split, args.verbose
-    )
+    label = split if args.dataset == "main" else f"{args.dataset} held-out"
+    print_report(report, label, args.verbose)
 
     if args.min_top1 is not None and report.top1_accuracy < args.min_top1:
         print(

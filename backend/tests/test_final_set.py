@@ -16,11 +16,16 @@ def faqs():
     return FaqRepository(config.FAQ_PATH).load()
 
 
-@pytest.fixture(scope="module")
-def final(faqs):
-    return EvaluationRepository(
-        config.FINAL_EVALUATION_PATH, (f.id for f in faqs)
-    ).load()
+PATHS = {"final": config.FINAL_EVALUATION_PATH, "final2": config.FINAL2_EVALUATION_PATH}
+
+
+def load(name, faqs):
+    return EvaluationRepository(PATHS[name], (f.id for f in faqs)).load()
+
+
+@pytest.fixture(scope="module", params=sorted(PATHS))
+def final(request, faqs):
+    return load(request.param, faqs)
 
 
 def test_covers_every_faq_and_includes_out_of_scope_cases(faqs, final):
@@ -42,7 +47,20 @@ def test_is_disjoint_from_the_tuning_and_reporting_set(faqs, final):
     assert [c.id for c in final if normalise_for_comparison(c.question) in seen] == []
 
 
-def test_written_in_a_conversational_style(final):
-    """Guards the purpose of the set: noticeably longer than FAQ-style questions."""
-    in_scope = [c.question for c in final if not c.is_out_of_scope]
+def test_the_two_held_out_sets_do_not_overlap(faqs):
+    first = {normalise_for_comparison(c.question) for c in load("final", faqs)}
+    second = load("final2", faqs)
+    assert [c.id for c in second if normalise_for_comparison(c.question) in first] == []
+
+
+def test_first_set_is_written_in_a_conversational_style(faqs):
+    in_scope = [c.question for c in load("final", faqs) if not c.is_out_of_scope]
     assert sum(len(q.split()) for q in in_scope) / len(in_scope) >= 10
+
+
+def test_second_set_mixes_keywords_slang_and_long_stories(faqs):
+    lengths = [
+        len(c.question.split()) for c in load("final2", faqs) if not c.is_out_of_scope
+    ]
+    assert sum(n <= 4 for n in lengths) >= 15  # keyword-style queries
+    assert sum(n >= 18 for n in lengths) >= 15  # long stories

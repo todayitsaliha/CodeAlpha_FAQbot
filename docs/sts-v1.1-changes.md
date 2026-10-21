@@ -17,7 +17,8 @@ with what is actually delivered. Scope and quality gates are unchanged.
 | 10 Risks: too few or low-quality FAQs | Client reviews every answer | Mitigated by synthetic generation (80 FAQs) and a held-out evaluation set |
 | 11 Assumptions: client provides source material | Required | Not required for this delivery |
 | 4.10 Stretch: sentence embeddings | Deferred | Word vectors (spaCy `en_core_web_md`) added as an optional third signal; sentence embeddings remain deferred |
-| 6.4 Evaluation set | One set | Main set (dev/test split) plus a final held-out set written after tuning |
+| 6.1 FAQ data | One phrasing style | Each FAQ also carries conversational, situation-style phrasings (7 alternates each) |
+| 6.4 Evaluation set | One set | Main set (dev/test split) plus two held-out sets written after tuning |
 | 9.1 Repository naming | `<developer-first-name>-faq-chatbot` | `CodeAlpha_FAQbot` (client-specified) |
 | 10 Risks: scope creep | Optional features limited to Weeks 3-4 | Optional features limited to Sprints 3-4 |
 | 11 Assumptions | Contact available "during Week 1"; hosting provisioned "before Week 3" | Contact available during Sprint 1 (Days 1-3 for dataset review); hosting provisioned before Day 6 |

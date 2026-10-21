@@ -36,6 +36,8 @@ jobs:
         run: python -m scripts.validate_data
       # Regression floors only. The 80% target is tracked in docs/matching-engine.md.
       - name: Accuracy regression floor (main set)
-        run: python -m scripts.evaluate --min-top1 0.70
-      - name: Accuracy regression floor (final held-out set)
-        run: python -m scripts.evaluate --dataset final --min-top1 0.30
+        run: python -m scripts.evaluate --min-top1 0.78
+      - name: Accuracy regression floor (held-out set 1)
+        run: python -m scripts.evaluate --dataset final --min-top1 0.50
+      - name: Accuracy regression floor (held-out set 2)
+        run: python -m scripts.evaluate --dataset final2 --min-top1 0.55
