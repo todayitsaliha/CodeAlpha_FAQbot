@@ -1,87 +1,140 @@
-# CodeAlpha_FAQbot
+# CodeAlpha FAQ Bot
 
-A retrieval-based FAQ chatbot. User questions and stored FAQ questions are cleaned
-with NLTK, vectorised with TF-IDF, and matched by cosine similarity. The answer of
-the best-matching FAQ is returned; low-confidence questions get a polite fallback
-with suggested questions. Every answer is a pre-approved FAQ answer (no generative AI).
+CodeAlpha FAQ Bot is a small question-and-answer app for a fictional online store
+called ShopEase. Ask a question in the web chat or terminal, and the bot compares it
+with its FAQ list to find a likely answer. It returns a prepared FAQ answer when the
+match is strong, suggests related questions when it is unsure, and uses a fallback
+when it cannot find a good match. It does not generate answers with an AI model.
 
-Specification: *Software Technical Specification (STS) v1.0*, re-baselined to a
-**2-week / 4-sprint** delivery (see `docs/sts-v1.1-changes.md`).
+## How it works
 
-## Repository layout
+1. The bot cleans and normalizes the question.
+2. It compares the question with FAQ questions and their alternate phrasings using
+   text similarity. Word-vector similarity is also used when its spaCy model is
+   available.
+3. It returns the matching FAQ answer, suggestions, or a fallback message.
 
-```
-backend/              Python application (3-tier: controllers / services / repositories)
-  app/controllers/    HTTP layer: routes, error handling, request hooks
-  app/services/       Preprocessing, synonyms, intents, matching, chatbot service
-  app/repositories/   FAQ + evaluation data access and validation
-  data/               faqs.json, test_questions.json
-  scripts/            setup_nltk, validate_data, evaluate, tune_thresholds, chat_cli
-  tests/              pytest suite
-frontend/             Static chat UI (Sprint 3)
-docs/                 Acceptance criteria, STS change log, design notes (preprocessing, matching, chatbot service, API)
-```
+The project includes a Python/Flask backend, a browser-based chat page, a command-line
+chat client, and scripts and tests for checking the FAQ data and matching quality.
+The browser page is served by the Flask app; no separate frontend server is needed.
 
-## Getting started
+## Requirements
 
-Python 3.10+ is required. This is a **Python** project: use `pip`, not `npm`.
+- Python 3.10 or 3.12
+- Internet access for installing Python dependencies and downloading NLTK data
 
-**Linux / macOS**
+## Run the app
 
-```bash
-cd backend
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements-dev.txt
-python -m scripts.setup_nltk          # one-time NLTK data download
-```
+Open a terminal in the project folder, then create and activate a virtual environment
+inside `backend`.
 
-**Windows (PowerShell)**
+**Windows PowerShell**
 
 ```powershell
 cd backend
 py -m venv .venv
-.\.venv\Scripts\Activate.ps1        # if blocked: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-pip install -r requirements-dev.txt
-python -m scripts.setup_nltk          # one-time NLTK data download
+.\.venv\Scripts\Activate.ps1
 ```
 
-Then, in either shell (from `backend/`):
+If PowerShell blocks activation, run this command in the same terminal and activate
+again:
 
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
-python run.py                             # start the API server on http://127.0.0.1:5000
-python -m scripts.chat_cli                # talk to the chatbot in the terminal
+
+**macOS / Linux**
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Then, from `backend/` in either shell, install the dependencies, download the required
+NLTK data, and start the app:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m scripts.setup_nltk
+python run.py
+```
+
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) to use the chat page. The server
+uses Waitress by default. To use Flask's development server instead, run
+`python run.py --dev`.
+
+The default host and port can be changed with command-line options or environment
+variables:
+
+```bash
+python run.py --host 127.0.0.1 --port 8000
+```
+
+The equivalent environment variables are `FAQBOT_HOST` and `FAQBOT_PORT`.
+
+## Try the command-line chat
+
+Run these commands from `backend/` with the virtual environment activated:
+
+```bash
+python -m scripts.chat_cli
+python -m scripts.chat_cli --ask "Do you ship abroad?"
 python -m scripts.chat_cli --ask "Do you ship abroad?" --debug
-python -m scripts.validate_data           # validate FAQ + evaluation datasets
-python -m scripts.preprocess_demo         # see the NLP pipeline stage by stage
-python -m scripts.evaluate --verbose      # measure accuracy on the evaluation set
-pytest                                    # run the test suite
-flake8 . && black --check .               # lint and format checks (also enforced in CI)
 ```
 
-## Branching strategy
+In interactive mode, type `quit` to exit. Debug mode includes matching details such as
+the confidence score.
 
-| Branch | Purpose |
-|---|---|
-| `main` | Production-ready code only; release tags (`v1.0.0`) |
-| `develop` | Integration branch |
-| `feature/backend/<name>`, `feature/frontend/<name>` | New work, branched from `develop` |
-| `bugfix/backend/<name>`, `bugfix/frontend/<name>` | Fixes, branched from `develop` |
+## API
 
-All work reaches `develop` through a pull request: CI green and at least one peer
-review. See `.github/pull_request_template.md`.
+The Flask app provides these endpoints:
 
-## Sprint plan (10 working days)
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `POST` | `/api/chat` | Get an answer for a question |
+| `GET` | `/api/faqs/suggested?limit=4` | Get a welcome message and example questions |
+| `GET` | `/api/health` | Check service status and FAQ count |
 
-| Sprint | Days | Focus | Status |
-|---|---|---|---|
-| 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | Done (pending GitHub setup) |
-| 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script, CLI client | Done; 80% accuracy target still open (see `docs/matching-engine.md`) |
-| 3 | 6-7 | Flask API, logging, error handling, chat UI | In progress (API done; chat UI next) |
-| 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | Planned |
+Send a chat question as JSON:
 
-## Dataset note
+```json
+{"message": "Do you ship abroad?"}
+```
 
-The project uses a **synthetic dataset** for a fictional online store ("ShopEase"):
-80 FAQs, 320 alternate phrasings and a separate 144-case evaluation set. See
-`backend/data/README.md` for provenance and the rules for extending it. The schema is
-identical to a real dataset, so swapping in genuine client FAQs later needs no code changes.
+The response includes an `answer`, a confidence score, whether the bot used a fallback,
+an optional matched FAQ question, and suggested questions.
+
+## Data and project layout
+
+```text
+backend/
+  app/                 Flask API, FAQ data access, and chatbot logic
+  data/                FAQ and evaluation question datasets
+  scripts/             Setup, command-line chat, validation, and evaluation tools
+  tests/               Backend and frontend tests
+  run.py               Starts the web app
+frontend/              Browser chat page, styles, and JavaScript
+.github/workflows/     Continuous integration checks
+```
+
+The FAQ data describes a fictional store and contains synthetic information, not real
+customer data. The FAQ list is the source of the bot's store-related answers. See
+[backend/data/README.md](backend/data/README.md) for dataset details and guidance on
+changing the data.
+
+## Check the project
+
+Run these commands from `backend/`:
+
+```bash
+python -m scripts.validate_data
+python -m scripts.evaluate --verbose
+pytest
+flake8 .
+black --check .
+```
+
+`validate_data` checks the FAQ and evaluation datasets. `evaluate` measures the
+matching quality on held-out questions. The test suite and lint/format checks are also
+run in the GitHub Actions workflow.
