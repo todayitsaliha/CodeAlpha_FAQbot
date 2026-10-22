@@ -18,15 +18,13 @@ backend/              Python application (3-tier: controllers / services / repos
   data/               faqs.json, test_questions.json
   scripts/            setup_nltk, validate_data, evaluate, tune_thresholds, chat_cli
   tests/              pytest suite
-frontend/             Static chat UI (served by the Flask app at /)
-docs/                 Acceptance criteria, STS change log, design notes (preprocessing, matching, chatbot service, API, UI)
+frontend/             Static chat UI (Sprint 3)
+docs/                 Acceptance criteria, STS change log, design notes (preprocessing, matching, chatbot service, API)
 ```
 
 ## Getting started
 
 Python 3.10+ is required. This is a **Python** project: use `pip`, not `npm`.
-`pip install` also downloads spaCy and its ~33 MB English model (word vectors), and the
-first start-up takes a few seconds while they load.
 
 **Linux / macOS**
 
@@ -50,7 +48,7 @@ python -m scripts.setup_nltk          # one-time NLTK data download
 Then, in either shell (from `backend/`):
 
 ```
-python run.py                             # start the chatbot + UI at http://127.0.0.1:5000
+python run.py                             # start the API server on http://127.0.0.1:5000
 python -m scripts.chat_cli                # talk to the chatbot in the terminal
 python -m scripts.chat_cli --ask "Do you ship abroad?" --debug
 python -m scripts.validate_data           # validate FAQ + evaluation datasets
@@ -78,8 +76,8 @@ review. See `.github/pull_request_template.md`.
 |---|---|---|---|
 | 1 | 1-2 | Repo, CI, FAQ dataset, evaluation set | Done (pending GitHub setup) |
 | 2 | 3-5 | NLP pipeline, matching engine, intents, evaluation script, CLI client | Done; 80% accuracy target still open (see `docs/matching-engine.md`) |
-| 3 | 6-7 | Flask API, logging, error handling, chat UI | Done; UI awaiting visual review in a browser |
-| 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | In progress (accuracy work done; target met on FAQ-style input only; release tasks next) |
+| 3 | 6-7 | Flask API, logging, error handling, chat UI | In progress (API done; chat UI next) |
+| 4 | 8-10 | Tuning, UAT, handover, tag `v1.0.0` | Planned |
 
 ## Dataset note
 
